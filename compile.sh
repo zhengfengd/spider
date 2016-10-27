@@ -41,6 +41,7 @@ execute(){
 }
 
 BASE_PATH=/baidu/
+apt-get install -y libtool-bin
 
 echo "Step 1: Compiling linux kernel"
 echo "Entering directory '${KERNEL_DIR}'"
@@ -70,9 +71,8 @@ ls -l ${BASE_PATH}/debs/
 
 
 echo "Compile SDK to custom output...."
-#cd ${BASE_PATH}/sdk/sx_sdk_eth-4.2.1056_M
-#yes | ./install.sh --use-sources --with-iproute2-3.19-sx_netdev --kernel-version 3.16.7-ckt20 --kernel-sources ${BASE_PATH}/kevin_BRANCH/os/base/kernel/3.16.7/linux-3.16.7-ckt20/ --prefix ${BASE_PATH}/sdk/sdk-output/ --build-root ${BASE_PATH}/sdk/sdk-output/usr/src/sx_sdk
-cd ${BASE_PATH}/sdk/sx_sdk_eth-4.2.1010
+#cd ${BASE_PATH}/sdk/sx_sdk_eth-4.2.2102/
+cd ${BASE_PATH}/sdk/sx_sdk_eth-4.2.1010/
 yes | ./install.sh --use-sources --with-iproute2-3.19-sx_netdev --kernel-version 3.16.7-ckt20 --kernel-sources ${BASE_PATH}kevin_BRANCH/os/base/kernel/3.16.7/linux-3.16.7-ckt20/ --prefix ${BASE_PATH}sdk/sdk-output/ --build-root ${BASE_PATH}sdk/sdk-output/usr/src/sx_sdk
 execute cp -r ../sdk-output/* /
 
@@ -153,10 +153,10 @@ do
     execute cp ${BASE_PATH}mlnx-baidu-integration/xorplus/pica_startup.boot new-image/pica/config/
     execute cp ${BASE_PATH}mlnx-baidu-integration/xorplus/pica_default.boot new-image/pica/bin
     execute cp ${BASE_PATH}mlnx-baidu-integration/patches/70-persistent-net.rules new-image/etc/udev/rules.d/
-    execute echo "auto eth0" >> new-image/etc/network/interfaces
-    execute echo "iface eth0 inet dhcp" >> new-image/etc/network/interfaces
-    execute echo "auto eth1" >> new-image/etc/network/interfaces
-    execute echo "iface eth1 inet dhcp" >> new-image/etc/network/interfaces
+    echo "auto eth0" >> new-image/etc/network/interfaces
+    echo "iface eth0 inet dhcp" >> new-image/etc/network/interfaces
+    echo "auto eth1" >> new-image/etc/network/interfaces
+    echo "iface eth1 inet dhcp" >> new-image/etc/network/interfaces
 
     #TODO: remove this, add to Dockerfile and rebuild
     apt-get install -y make
@@ -167,9 +167,10 @@ do
     #dpkg --root new-image  -i ${BASE_PATH}debs/hw-management_1.mlnx.25.5.2016_amd64.deb
     #dpkg --root new-image  -i ${BASE_PATH}debs/kernel-mft-dkms_4.2.0-15_all.deb
     #install necessary packages
-    cd ${BASE_PATH}debs/
-    execute apt-get download make patch dkms libpci3 pciutils libusb-1.0-0 usbutils libxml2 libxml2-dev dhcpcd5
+    #cd ${BASE_PATH}debs/
+    #execute apt-get download make patch dkms libpci3 pciutils libusb-1.0-0 usbutils libxml2 libxml2-dev dhcpcd5
     cd ${IMAGES_DIR}
+    execute tar xvzf ${BASE_PATH}mlnx-baidu-integration/tar/mlnx-spider.debs.tar.gz -C ${BASE_PATH}debs/
     dpkg --root new-image  -i ${BASE_PATH}debs/make_4.0-8.1_amd64.deb
     dpkg --root new-image  -i ${BASE_PATH}debs/patch_2.7.5-1_amd64.deb
     dpkg --root new-image  -i ${BASE_PATH}debs/dkms_2.2.0.3-2_all.deb
@@ -177,8 +178,8 @@ do
     dpkg --root new-image  -i ${BASE_PATH}debs/pciutils_1%3a3.2.1-3_amd64.deb
     dpkg --root new-image  -i ${BASE_PATH}debs/libusb-1.0-0_2%3a1.0.19-1_amd64.deb
     dpkg --root new-image  -i ${BASE_PATH}debs/usbutils_1%3a007-2_amd64.deb
-    dpkg --root new-image  -i ${BASE_PATH}debs/libxml2_2.9.1+dfsg1-5+deb8u1_amd64.deb
-    dpkg --root new-image  -i ${BASE_PATH}debs/libxml2-dev_2.9.1+dfsg1-5+deb8u1_amd64.deb
+    dpkg --root new-image  -i ${BASE_PATH}debs/libxml2_2.9.1+dfsg1-5+deb8u3_amd64.deb
+    dpkg --root new-image  -i ${BASE_PATH}debs/libxml2-dev_2.9.1+dfsg1-5+deb8u3_amd64.deb
     dpkg --root new-image  -i ${BASE_PATH}debs/dhcpcd5_6.0.5-2_amd64.deb
 
 
